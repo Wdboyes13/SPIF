@@ -1,0 +1,74 @@
+{
+    // ID-Type-Name
+    // type can be:
+    // - Package (should only be a root package)
+    // - BuildDependency (dependency for builtime)
+    // - RunDependency (dependency needed for running the program)
+    // - DataDependency (depeendency contianing only data)
+    // - BuildTool (tool needed to build it)
+    "ID-Package-Test": {
+        "name": "Test",
+        "description": "A test package",
+        "licenseid": "MIT", // should be from spdx-license-list
+        "cryears": "2025-2026",
+        "link": "https://example.com",
+        "authors": [
+            {
+                "name": "Wdboyes13",
+                "email": "willdev2025@outlook.com",
+                "site": "https://weelam.ca",
+            }, // name is required, as well as either a website or email, the website can be a github profile
+        ],
+        // Platoform identifiers can be
+        // 1. OS Name
+        // 2. Architecture Name
+        // 3. ABI Name
+        // 4. Manufacturer name
+        // 5. Target Triple
+        "platforms": [{ "Windows": "Unsupported" }], // if the first is an unsupported platform, all platforms unspecified are assumed to be supported,
+        //                  same kind of for the other way around
+        "files": [
+            // the type field can be
+            // - source (source file)
+            // - binout (binary output file)
+            // - doc (documentation file)
+            // - meta (metadata file)
+            // - data (file containing other data)
+            { "name": "src/test.c", "type": "source" }, // name is the path
+            { "name": "include/app.h", "type": "source" },
+            { "name": "build/app", "type": "binout" }, // binary output
+            { "name": "README.md", "type": "doc" },
+            { "name": "LICENSE", "type": "doc", "license": "CC-0" }, // this file has a different license
+            { "name": "meson.build", "type": "meta" }, // metadata, also includes build scripts, since they describe the build
+            {
+                "name": ".gitignore",
+                "type": "data",
+                "description": "Tells git which files to ignore", // description is a short description of the file
+            },
+        ],
+        "subpackage": {
+            "ID-BuildDependency-Miniaudio": {
+                // build dependency
+                "name": "MiniAudio",
+                "licenseid": "MIT-0",
+                "cryears": "2025", // year field in the copyright notice, for format "Copyright (c) YEAR AUTHORS"
+                "link": "https://github.com/mackron/miniaudio", // source link preffered
+                "authors": [
+                    { "name": "David Reid", "email": "mackron@gmail.com" },
+                ],
+                "files": [{ "name": "include/miniaudio.h", "type": "source" }],
+                "subpackage": {
+                    "ID0-BuildTool-CXXCompiler": {
+                        // ID0 since this is the first time this is here
+                        "name": "CXXCompiler", // C++ compiler
+                        // pretty much nothing needed for stuff like this, since C++ compiler is generic
+                    },
+                },
+            },
+        },
+        "ID1-BuildTool-CXXCompiler": {
+            // ID1, since this is the second time this shows up
+            "name": "CXXCompiler", // C++ compiler
+        },
+    },
+}
